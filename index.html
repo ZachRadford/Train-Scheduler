@@ -49,15 +49,15 @@
 		<div class="panel panel-default">
 
   			<div class="panel-heading">
-    		Current Train Schedule with no basis in reality
+    		Current Train Schedule
   			</div>
 
   			<table class="table" id="trainSchedule">
   				<thead>
 	  				<tr>
 	  					<th>Departure City</th>
-	  					<th>Destination</th>
-	  					<th>How often shit happens</th>
+	  					<th>Arrival City</th>
+	  					<th>Train Frequency</th>
 	  					<th>First Arrival</th>
 	  					<th>Time until next train</th>
 	  				</tr>
@@ -100,12 +100,12 @@
 
 					<div class="form-group" id="timeOfTrain">
 					  <label for="time_of_train">Time of Train (HH:mm)</label>
-					  <input name="time_of_train" type="text" class="form-control" placeholder="How time is train">
+					  <input name="time_of_train" type="text" class="form-control" placeholder="Time of first train">
 					</div>
 
 					<div class="form-group" id="trainFrequency">
 					  <label for="frequency_of_train">Frequency of train (min)</label>
-					  <input name="frequency_of_train" type="text" class="form-control" placeholder="Once in a while">
+					  <input name="frequency_of_train" type="text" class="form-control" placeholder="Time between trains">
 					</div>
 
 					<div class="form-group">
@@ -123,11 +123,13 @@
 
 
 
-	<script src="https://code.jquery.com/jquery-2.1.3.min.js">
-	</script>
+	<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 
-  	<script type="text/javascript" src="assets/javascript/train.js">
-  	</script>
+  	<script type="text/javascript" src="assets/javascript/train.js"></script>
+
+  	<script type="text/javascript" src="assets/javascript/jquery.mask.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 
    	<script src="https://www.gstatic.com/firebasejs/4.1.2/firebase.js"></script>
 

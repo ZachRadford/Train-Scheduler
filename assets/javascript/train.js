@@ -1,18 +1,41 @@
 
 $(document).ready(function(){
 
-	var config = {
-	    apiKey: "AIzaSyBZHj11EqxUdAJoPRi8nG9Y45s_JpsnF50",
-	    authDomain: "train-scheduler-f4f2a.firebaseapp.com",
-	    databaseURL: "https://train-scheduler-f4f2a.firebaseio.com",
-	    projectId: "train-scheduler-f4f2a",
-	    storageBucket: "train-scheduler-f4f2a.appspot.com",
-	    messagingSenderId: "1020435820509"
-  	};
+	 var config = {
+		    apiKey: "AIzaSyCMsOqLxqriJkdcasa8FCd9_Wygt3d4cck",
+		    authDomain: "train-homework-3205f.firebaseapp.com",
+		    databaseURL: "https://train-homework-3205f.firebaseio.com",
+		    projectId: "train-homework-3205f",
+		    storageBucket: "train-homework-3205f.appspot.com",
+		    messagingSenderId: "460020105624"
+		  };
+
 
   	firebase.initializeApp(config);
 
   	var database = firebase.database();
+
+
+  	var options =  {
+	  
+	  onKeyPress: function(cep, event, currentField, options){
+	    console.log('An key was pressed!:', cep, ' event: ', event,
+	                'currentField: ', currentField, ' options: ', options);
+	  },
+	  onChange: function(cep){
+	    console.log('cep changed! ', cep);
+	  },
+	  onInvalid: function(val, e, f, invalid, options){
+	    var error = invalid[0];
+	    console.log ("Digit: ", error.v, " is invalid for the position: ", error.p, ". We expect something like: ", error.e);
+	  }
+	};
+
+
+  	$("input[name='frequency_of_train']").mask('99:99', options)
+  	$("input[name='time_of_train']").mask('90:99', options)
+  	
+  	
 
 
 
@@ -20,10 +43,8 @@ $(document).ready(function(){
 		event.preventDefault();
 
 		var values = $(this).serializeArray()
-		console.log(values)
 
 		values = formatData(values)
-		console.log("2", values)
 
 		writeData(values);
 
@@ -32,19 +53,20 @@ $(document).ready(function(){
 
 
 	var trainsRef = database.ref();
+
 	trainsRef.on('value', function(snapshot){
 		$("#trainSchedule tbody").empty();
 		snapshot.forEach(function(childSnapshot){
 			var row = $("<tr>")
 
-			row.append($("<td>").text(childSnapshot.val().departure_city))
-			row.append($("<td>").text(childSnapshot.val().arrival_city))
-			row.append($("<td>").text(childSnapshot.val().frequency_of_train))
-			row.append($("<td>").text(childSnapshot.val().time_of_train))
-			row.append($("<td>").text(fuckTime(childSnapshot.val().time_of_train, childSnapshot.val().frequency_of_train)))
+			var data = childSnapshot.val()
 
-
-
+			row.append($("<td>").text(data.departure_city))
+			row.append($("<td>").text(data.arrival_city))
+			row.append($("<td>").text(data.frequency_of_train))
+			row.append($("<td>").text(data.time_of_train))
+			row.append($("<td>").text(calcTime(data.time_of_train, data.frequency_of_train)))
+			
 			$("#trainSchedule tbody").append(row)
 
 		})
@@ -70,15 +92,44 @@ $(document).ready(function(){
 
 
 
-	function fuckTime(time_of_train, frequency_of_train){
-		var now = new Date()
+	function calcTime(time_of_train, frequency_of_train){
+		
+		var now = moment()
 
-		var originalTime = new Date(time_of_train)
-		console.log(originalTime)
+		var totFormat = moment(time_of_train, "HH:mm")
 
-		var difference = originalTime - now
+		var timeSince = now.diff(totFormat, 'minutes')
 
-		console.log(difference.getMinutes())
+		var lastTrain = timeSince % frequency_of_train
+
+		var nextTrain = frequency_of_train - lastTrain
+
+		var hours = Math.floor(nextTrain / 60)
+
+		var minutes = nextTrain % 60
+
+		console.log(nextTrain)
+
+		var nextTrainString = ""
+
+		if (hours > 0) {
+			nextTrainString += hours + " hour"
+
+			if (hours > 1){
+				nextTrainString += "s"
+			}
+
+			nextTrainString += ", "
+		}
+
+
+		nextTrainString +=  minutes + " minute"
+		if (minutes > 1){
+			nextTrainString += "s"
+		}
+
+		return nextTrainString
+		
 	}
 
 
