@@ -16,28 +16,28 @@ $(document).ready(function(){
   	var database = firebase.database();
 
 
-  	var options =  {
-	  
-	  onKeyPress: function(cep, event, currentField, options){
-	    console.log('An key was pressed!:', cep, ' event: ', event,
-	                'currentField: ', currentField, ' options: ', options);
-	  },
-	  onChange: function(cep){
-	    console.log('cep changed! ', cep);
-	  },
-	  onInvalid: function(val, e, f, invalid, options){
-	    var error = invalid[0];
-	    console.log ("Digit: ", error.v, " is invalid for the position: ", error.p, ". We expect something like: ", error.e);
-	  }
-	};
+  	  	
+  	// $("input[name='time_of_train']").mask('z0:x0', {
+  	// 	placeholder: "__:__", 
+  	// 	reverse: true,
+  	// 	clearIfNotMatch: true,
+  	// 	translation: {
+  	// 		"z":{
+  	// 			pattern: /[0-2]/,
+  	// 			optional: true
+  	// 		},
+
+  	// 		"x":{
+  	// 			pattern: /[0-6]/
+   // 			}
+  	// 	}
+	  	
+  	// })
 
 
-  	$("input[name='frequency_of_train']").mask('99:99', options)
-  	$("input[name='time_of_train']").mask('90:99', options)
+  	// $("input[name='frequency_of_train']").mask('#0', {reverse: true})
   	
   	
-
-
 
 	$("#trainForm").on("submit", function(event){
 		event.preventDefault();
@@ -47,6 +47,8 @@ $(document).ready(function(){
 		values = formatData(values)
 
 		writeData(values);
+
+		$(this).find("input[type=text], textarea").val("");
 
 	
 	})
@@ -63,7 +65,7 @@ $(document).ready(function(){
 
 			row.append($("<td>").text(data.departure_city))
 			row.append($("<td>").text(data.arrival_city))
-			row.append($("<td>").text(data.frequency_of_train))
+			row.append($("<td>").text(data.frequency_of_train + " minutes"))
 			row.append($("<td>").text(data.time_of_train))
 			row.append($("<td>").text(calcTime(data.time_of_train, data.frequency_of_train)))
 			
